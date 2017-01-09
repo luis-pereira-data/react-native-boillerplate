@@ -1,44 +1,24 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import AccountKit, { Color } from 'react-native-facebook-account-kit';
+import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import { loginUser, attempGetAccount } from '../actions/LoginActions';
 
-class Login extends Component {
+class LoginComponent extends Component {
 
   componentWillMount() {
-    this.configureAccountKit();
+    AccountKit.configure({
+      theme: styles.accountKit,
+      countryWhitelist: ['GB'],
+      defaultCountry: 'GB'
+    });
 
-    AccountKit.getCurrentAccessToken()
-      .then((token) => {
-        if (token) {
-          AccountKit.getCurrentAccount()
-            .then(account => {
-              this.setState({ authToken: token, loggedAccount: account });
-              });
-        } else {
-          console.log('No user account logged');
-        }
-      })
-      .catch(e => console.log('Failed to get current access token', e));
-  }
-
-  onLogin(token) {
-    if (!token) {
-      console.warn('User canceled login');
-      this.setState({});
-    } else {
-      AccountKit.getCurrentAccount()
-        .then((account) => {
-          this.setState({ authToken: token, loggedAccount: account });
-          Actions.search();
-        });
-    }
+    this.props.attempGetAccount();
   }
 
   onPhoneLoginPressed() {
-    AccountKit.loginWithPhone()
-      .then(token => this.onLogin(token))
-      .catch((e) => this.onLoginError(e));
+    this.props.loginUser();
   }
 
   onEmailLoginPressed() {
@@ -49,14 +29,6 @@ class Login extends Component {
 
   onLoginError(e) {
     console.log('Failed to login', e);
-  }
-
-  configureAccountKit() {
-    AccountKit.configure({
-      theme: styles.accountKit,
-      countryWhitelist: ['GB'],
-      defaultCountry: 'GB'
-    });
   }
 
   render() {
@@ -109,4 +81,4 @@ const styles = {
   },
 };
 
-export default Login;
+export default connect(null, { loginUser, attempGetAccount })(LoginComponent);
