@@ -1,4 +1,9 @@
-import { LOGIN_FAIL, LOGIN_SUCCESS } from '../actions/LoginActions';
+import {
+  LOGIN_FAIL,
+  LOGIN_SUCCESS,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAIL,
+} from '../actions/types';
 
 const INITIAL_STATE = {
   account: null,
@@ -8,9 +13,14 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case LOGIN_SUCCESS:
-      return { ...state, ...INITIAL_STATE, account: action.payload };
+      console.log(action);
+      return { ...state, ...INITIAL_STATE, account: action.payload.account };
     case LOGIN_FAIL:
       return { ...state, error: 'Authentication Failed.', password: '' };
+    case LOGOUT_SUCCESS:
+        return { ...state, account: null };
+    case LOGOUT_FAIL:
+        return { ...state };
     default:
       return state;
   }

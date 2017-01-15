@@ -1,10 +1,16 @@
 import { Actions } from 'react-native-router-flux';
 import AccountKit from 'react-native-facebook-account-kit';
-import { LOGIN_SUCCESS, LOGIN_FAIL } from './LoginActions';
+import {
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAIL
+} from './types';
 
 export const attempGetAccount = () => {
 
   return (dispatch) => {
+
       AccountKit.getCurrentAccessToken()
         .then(token => {
         if (token) {
@@ -40,10 +46,20 @@ const loginSuccess = (dispatch, token) => {
     .then((account) => {
       dispatch({
         type: LOGIN_SUCCESS,
-        payload: { authToken: token, loggedAccount: account }
+        payload: { token, account }
       });
-      this.setState();
+      
       Actions.search();
     });
-  Actions.search();
+};
+
+export const logout = () => {
+  return (dispatch) => {
+    dispatch({ type: LOGOUT_SUCCESS });
+    AccountKit.logout()
+    .then(() => {
+      dispatch({ type: LOGOUT_SUCCESS });
+    })
+    .catch(() => dispatch({ type: LOGOUT_FAIL }));
+  };
 };

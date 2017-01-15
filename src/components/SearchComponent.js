@@ -1,22 +1,16 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
-import AccountKit from 'react-native-facebook-account-kit';
+import { connect } from 'react-redux';
+import { logout } from '../actions/LoginActions';
 
-class Search extends Component {
+class SearchComponent extends Component {
 
   onLogoutPressed() {
-    AccountKit.logout()
-      .then(() => {
-        this.setState({
-          authToken: null,
-          loggedAccount: null
-        });
-      })
-      .catch(() => console.log('Failed to logout'));
+    this.props.logout();
   }
 
   render() {
-    const { id, email, phoneNumber } = this.props.logged;
+    const { id, email, phoneNumber} = this.props.account;
     return (
       <View>
         <TouchableOpacity style={styles.button} onPress={() => this.onLogoutPressed()}>
@@ -60,4 +54,11 @@ const styles = {
   }
 };
 
-export default Search;
+const mapStateToProps = (state) => {
+  console.log(state);
+  const { account } = state.login;
+
+  return { account };
+};
+
+export default connect(mapStateToProps, { logout })(SearchComponent);
