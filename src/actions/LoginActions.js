@@ -48,18 +48,20 @@ const loginSuccess = (dispatch, token) => {
         type: LOGIN_SUCCESS,
         payload: { token, account }
       });
-      
       Actions.search();
     });
 };
 
 export const logout = () => {
   return (dispatch) => {
-    dispatch({ type: LOGOUT_SUCCESS });
     AccountKit.logout()
-    .then(() => {
-      dispatch({ type: LOGOUT_SUCCESS });
+      .then(() => {
+        dispatch({ type: LOGOUT_SUCCESS });
+          Actions.login();
     })
-    .catch(() => dispatch({ type: LOGOUT_FAIL }));
+    .catch(() => {
+      dispatch({ type: LOGOUT_FAIL });
+        Actions.login();
+      });
   };
 };

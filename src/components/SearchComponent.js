@@ -10,7 +10,7 @@ class SearchComponent extends Component {
   }
 
   render() {
-    const { id, email, phoneNumber} = this.props.account;
+    const { id, email, phoneNumber } = this.props.account;
     return (
       <View>
         <TouchableOpacity style={styles.button} onPress={() => this.onLogoutPressed()}>
@@ -56,9 +56,9 @@ const styles = {
 
 const mapStateToProps = (state) => {
   console.log(state);
-  const { account } = state.login;
+  const { account, token } = state.login;
 
-  return { account };
+  return { account, token };
 };
 
 export default connect(mapStateToProps, { logout })(SearchComponent);

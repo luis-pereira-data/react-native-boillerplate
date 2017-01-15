@@ -18,6 +18,7 @@ export default (state = INITIAL_STATE, action) => {
     case LOGIN_FAIL:
       return { ...state, error: 'Authentication Failed.', password: '' };
     case LOGOUT_SUCCESS:
+        console.log(action);
         return { ...state, account: null };
     case LOGOUT_FAIL:
         return { ...state };
